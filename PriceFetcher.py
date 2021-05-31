@@ -3,20 +3,11 @@ from bs4 import BeautifulSoup
 
 
 class PriceFetcher:
-    def __init__(self):
+    def __init__(self, items):
         """
         Obtains the price/prices of items.
         """
-        self.ITEMS = [
-            {
-                "name": "Acer ED270R 27 inch Monitor",
-                "url": "https://www.amazon.in/dp/B08K9YLTJ7/ref=cm_sw_em_r_mt_dp_V0B240J9MAMABXRD964K?_encoding=UTF8&psc=1"
-            },
-            {
-                "name": "Ryzen 5 3600",
-                "url": "https://www.amazon.in/dp/product/B07STGGQ18/ref=ox_sc_saved_title_9?smid=A14CZOWI0VEHLG&psc=1"
-            },
-        ]
+        self.ITEMS = items
 
     def get_price(self, url):
         """
@@ -66,6 +57,7 @@ class PriceFetcher:
             prices.append(
                 {
                     "name": name,
+                    "url": item["url"],
                     "price": price,
                 }
             )
@@ -74,7 +66,12 @@ class PriceFetcher:
 
 
 if __name__ == "__main__":
-    Prices = PriceFetcher()
-    price_list = Prices.get_prices()
-    # print(price_list)
+    import json
 
+    with open("price-data.json", "r") as price_read_file:
+        data = json.load(price_read_file)
+
+    Prices = PriceFetcher(data)
+    price_list = Prices.get_prices()
+
+    print(price_list)
